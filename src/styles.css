@@ -1,0 +1,779 @@
+:root {
+  color: #26343a;
+  background: #edf2eb;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --panel-bg: rgba(255, 252, 246, 0.76);
+  --panel-strong: rgba(255, 255, 255, 0.9);
+  --panel-border: rgba(74, 92, 94, 0.16);
+  --shadow-soft: 0 18px 38px rgba(57, 73, 79, 0.13);
+  --shadow-tight: 0 10px 22px rgba(57, 73, 79, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+  letter-spacing: 0;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  touch-action: manipulation;
+}
+
+.app {
+  position: relative;
+  min-height: 100dvh;
+  padding: 14px;
+  overflow: hidden;
+  color: var(--planet-ink, #26343a);
+  background:
+    linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 46%, var(--sky-bottom) 100%);
+}
+
+.app::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  content: "";
+  background:
+    linear-gradient(140deg, rgba(255, 255, 255, 0.46), transparent 45%),
+    linear-gradient(0deg, rgba(247, 249, 243, 0.78), transparent 34%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.08) 0,
+      rgba(255, 255, 255, 0.08) 1px,
+      transparent 1px,
+      transparent 28px
+    );
+}
+
+.topbar,
+.observatory-grid,
+.recovery-panel {
+  position: relative;
+  z-index: 1;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 1180px;
+  width: min(100%, 1180px);
+  margin: 0 auto 12px;
+}
+
+.brand {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-mark {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  place-items: center;
+  color: #fffaf4;
+  background: color-mix(in srgb, var(--accent) 78%, #45545e);
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  border-radius: 8px;
+  box-shadow: var(--shadow-tight);
+}
+
+.brand h1,
+.panel-heading h2,
+.recovery-panel h2 {
+  margin: 0;
+  font-weight: 760;
+  line-height: 1.08;
+}
+
+.brand h1 {
+  font-size: 1.05rem;
+}
+
+.brand p,
+.panel-heading p,
+.restore-message {
+  margin: 3px 0 0;
+  color: rgba(38, 52, 58, 0.68);
+  font-size: 0.77rem;
+  line-height: 1.35;
+}
+
+.mission-status {
+  display: inline-flex;
+  min-width: 68px;
+  height: 38px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 12px;
+  color: #fffaf6;
+  background: rgba(38, 52, 58, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  box-shadow: var(--shadow-tight);
+  font-weight: 760;
+}
+
+.observatory-grid {
+  display: grid;
+  grid-template-areas:
+    "planet"
+    "readings"
+    "discoveries";
+  gap: 12px;
+  max-width: 1180px;
+  width: min(100%, 1180px);
+  margin: 0 auto;
+}
+
+.planet-zone {
+  display: grid;
+  grid-area: planet;
+  gap: 10px;
+}
+
+.scene-frame {
+  position: relative;
+  min-height: 410px;
+  height: 55dvh;
+  max-height: 590px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
+  box-shadow: var(--shadow-soft);
+}
+
+.scene-frame::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 34%;
+  pointer-events: none;
+  content: "";
+  background: linear-gradient(0deg, rgba(245, 247, 239, 0.62), transparent);
+}
+
+.scene-host {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, var(--scene-sky-top), var(--scene-sky-mid) 54%, var(--scene-sky-bottom));
+}
+
+.scene-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  color: rgba(38, 52, 58, 0.62);
+  background:
+    linear-gradient(180deg, var(--sky-top), var(--sky-mid) 54%, var(--sky-bottom));
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.scene-fallback i {
+  color: var(--accent);
+  font-size: 1.4rem;
+}
+
+.scene-host::before {
+  position: absolute;
+  inset: auto -10% 0;
+  height: 32%;
+  content: "";
+  background:
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.68)),
+    repeating-linear-gradient(
+      0deg,
+      rgba(71, 88, 90, 0.08) 0,
+      rgba(71, 88, 90, 0.08) 1px,
+      transparent 1px,
+      transparent 18px
+    );
+}
+
+.planet-canvas {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+}
+
+.planet-canvas:active {
+  cursor: grabbing;
+}
+
+.scene-overlay {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  left: 12px;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.planet-label,
+.weather-badge {
+  max-width: 58%;
+  padding: 8px 10px;
+  background: rgba(255, 252, 246, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.56);
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(69, 82, 88, 0.1);
+  backdrop-filter: blur(14px);
+}
+
+.planet-label span,
+.weather-badge span {
+  display: block;
+  color: rgba(38, 52, 58, 0.62);
+  font-size: 0.68rem;
+  line-height: 1.2;
+}
+
+.planet-label strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 1.1rem;
+  line-height: 1.05;
+}
+
+.weather-badge {
+  display: inline-flex;
+  max-width: 40%;
+  align-items: center;
+  gap: 7px;
+}
+
+.weather-badge i {
+  color: var(--accent);
+}
+
+.control-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.launch-button {
+  grid-column: 1 / -1;
+}
+
+.launch-button,
+.tool-button,
+.restore-row button,
+.icon-only,
+.quiet-reset {
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.launch-button,
+.tool-button,
+.restore-row button {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 14px;
+  font-size: 0.88rem;
+  font-weight: 760;
+  line-height: 1;
+  transition:
+    transform 170ms ease,
+    box-shadow 170ms ease,
+    opacity 170ms ease;
+}
+
+.launch-button {
+  color: #fffaf4;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 84%, #674f53), var(--weather));
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 34%, transparent);
+}
+
+.tool-button,
+.restore-row button {
+  color: var(--planet-ink);
+  background: rgba(255, 252, 246, 0.78);
+  border: 1px solid var(--panel-border);
+  box-shadow: 0 8px 18px rgba(54, 69, 73, 0.08);
+}
+
+.launch-button:not(:disabled):hover,
+.tool-button:not(:disabled):hover,
+.restore-row button:not(:disabled):hover,
+.quiet-reset:hover,
+.icon-only:hover {
+  transform: translateY(-1px);
+}
+
+.launch-button:disabled,
+.tool-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.status-line {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 9px;
+  padding: 0 12px;
+  color: rgba(38, 52, 58, 0.72);
+  background: rgba(255, 252, 246, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.status-line i {
+  color: var(--accent);
+}
+
+.instrument-panel,
+.recovery-panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+.instrument-panel {
+  padding: 14px;
+}
+
+.readings-panel {
+  grid-area: readings;
+}
+
+.discovery-panel {
+  grid-area: discoveries;
+}
+
+.panel-heading {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.panel-heading h2,
+.recovery-panel h2 {
+  font-size: 1rem;
+}
+
+.panel-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  place-items: center;
+  color: var(--accent);
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+}
+
+.focus-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.status-pill {
+  min-width: 0;
+  padding: 9px;
+  background: rgba(255, 255, 255, 0.56);
+  border: 1px solid rgba(80, 96, 98, 0.12);
+  border-radius: 8px;
+}
+
+.status-pill i {
+  color: var(--accent);
+  font-size: 0.78rem;
+}
+
+.status-pill span,
+.metric-grid small {
+  display: block;
+  margin-top: 4px;
+  color: rgba(38, 52, 58, 0.58);
+  font-size: 0.66rem;
+  line-height: 1.2;
+}
+
+.status-pill strong,
+.metric-grid strong {
+  display: block;
+  margin-top: 2px;
+  overflow-wrap: anywhere;
+  font-size: 0.86rem;
+  line-height: 1.15;
+}
+
+.latest-reading {
+  margin-top: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.48);
+  border: 1px solid rgba(80, 96, 98, 0.12);
+  border-radius: 8px;
+}
+
+.reading-title {
+  display: grid;
+  gap: 3px;
+  margin-bottom: 10px;
+}
+
+.reading-title span {
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 760;
+}
+
+.reading-title strong {
+  font-size: 0.95rem;
+  line-height: 1.18;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.metric-grid span {
+  min-width: 0;
+  padding: 8px;
+  background: rgba(255, 252, 246, 0.65);
+  border-radius: 8px;
+}
+
+.empty-reading {
+  display: flex;
+  min-height: 94px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: rgba(38, 52, 58, 0.58);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.empty-reading i {
+  color: var(--accent);
+}
+
+.discovery-list {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.discovery-item {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 9px;
+  align-items: start;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(80, 96, 98, 0.12);
+  border-radius: 8px;
+}
+
+.discovery-item.unlocked {
+  background: color-mix(in srgb, var(--weather) 12%, rgba(255, 255, 255, 0.72));
+  border-color: color-mix(in srgb, var(--accent) 34%, rgba(80, 96, 98, 0.13));
+}
+
+.discovery-index {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  color: rgba(38, 52, 58, 0.55);
+  background: rgba(255, 252, 246, 0.7);
+  border-radius: 8px;
+}
+
+.discovery-item.unlocked .discovery-index {
+  color: var(--accent);
+}
+
+.discovery-copy {
+  min-width: 0;
+}
+
+.discovery-copy strong,
+.discovery-copy span {
+  display: block;
+}
+
+.discovery-copy strong {
+  font-size: 0.85rem;
+  line-height: 1.18;
+}
+
+.discovery-copy span {
+  margin-top: 4px;
+  color: rgba(38, 52, 58, 0.63);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.recovery-panel {
+  display: grid;
+  gap: 12px;
+  max-width: 1180px;
+  width: min(100%, 1180px);
+  margin: 12px auto 0;
+  padding: 12px;
+}
+
+.code-box,
+.restore-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.code-box {
+  margin-top: 8px;
+}
+
+.code-box code {
+  display: block;
+  min-width: 0;
+  flex: 1;
+  padding: 11px 12px;
+  overflow-x: auto;
+  overflow-wrap: normal;
+  white-space: nowrap;
+  color: #26343a;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(80, 96, 98, 0.13);
+  border-radius: 8px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.83rem;
+  line-height: 1.15;
+}
+
+.icon-only {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  place-items: center;
+  color: var(--planet-ink);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(80, 96, 98, 0.13);
+}
+
+.restore-form label {
+  display: block;
+  margin-bottom: 7px;
+  color: rgba(38, 52, 58, 0.66);
+  font-size: 0.74rem;
+  font-weight: 760;
+}
+
+.restore-row input {
+  min-width: 0;
+  min-height: 44px;
+  flex: 1;
+  padding: 0 11px;
+  color: #26343a;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(80, 96, 98, 0.16);
+  border-radius: 8px;
+  outline: none;
+}
+
+.restore-row input:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 68%, #ffffff);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.restore-row button {
+  min-height: 44px;
+  padding: 0 12px;
+}
+
+.restore-message {
+  min-height: 18px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+  }
+}
+
+@media (min-width: 700px) {
+  .app {
+    padding: 18px;
+  }
+
+  .brand h1 {
+    font-size: 1.22rem;
+  }
+
+  .observatory-grid {
+    gap: 14px;
+  }
+
+  .control-strip {
+    grid-template-columns: minmax(190px, 1.25fr) minmax(130px, 0.8fr) minmax(150px, 0.9fr);
+  }
+
+  .launch-button {
+    grid-column: auto;
+  }
+
+  .recovery-panel {
+    grid-template-columns: 0.85fr 1.15fr;
+    align-items: start;
+    gap: 16px;
+  }
+}
+
+@media (min-width: 980px) {
+  .app {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100dvh;
+    padding: 20px;
+  }
+
+  .observatory-grid {
+    grid-template-areas: "readings planet discoveries";
+    grid-template-columns: minmax(230px, 0.82fr) minmax(430px, 1.42fr) minmax(250px, 0.9fr);
+    align-items: stretch;
+  }
+
+  .scene-frame {
+    height: min(66dvh, 640px);
+    min-height: 530px;
+  }
+
+  .instrument-panel {
+    align-self: stretch;
+  }
+
+  .discovery-list {
+    gap: 9px;
+  }
+
+  .recovery-panel {
+    margin-top: 14px;
+  }
+}
+
+@media (min-width: 1180px) {
+  .scene-frame {
+    min-height: 590px;
+  }
+
+  .instrument-panel {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 380px) {
+  .app {
+    padding: 10px;
+  }
+
+  .brand-mark {
+    width: 38px;
+    height: 38px;
+  }
+
+  .brand h1 {
+    font-size: 0.96rem;
+  }
+
+  .brand p {
+    font-size: 0.7rem;
+  }
+
+  .mission-status {
+    min-width: 60px;
+    padding: 0 9px;
+  }
+
+  .scene-frame {
+    min-height: 360px;
+    height: 53dvh;
+  }
+
+  .weather-badge span,
+  .planet-label span {
+    font-size: 0.62rem;
+  }
+
+  .planet-label strong {
+    font-size: 0.98rem;
+  }
+
+  .launch-button,
+  .tool-button {
+    padding: 0 10px;
+    font-size: 0.8rem;
+  }
+
+  .restore-row {
+    align-items: stretch;
+  }
+
+  .restore-row button span {
+    display: none;
+  }
+}
